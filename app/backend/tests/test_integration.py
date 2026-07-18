@@ -90,3 +90,38 @@ def test_end_to_end_syllabus_and_plan_flow(client):
     history_data = history_resp.json()
     assert len(history_data) == 1
     assert history_data[0]["check_in_note"] == "Felt good, completed variables!"
+
+    # 6. Simulate falling behind on Day 2 (missed Day 2 scheduled topic)
+    day2_date = (datetime.date.today() + datetime.timedelta(days=1)).isoformat()
+    # Log progress for Day 2 with NO completed topics (missing Control structures)
+    progress2_resp = client.post(
+        f"/api/v1/progress/{plan_data['id']}",
+        json={
+            "date": day2_date,
+            "completed_hours": 0.0,
+            "completed_topics": [],
+            "check_in_note": "Was busy, missed control structures."
+        },
+        headers=headers
+    )
+    assert progress2_resp.status_code == 201
+
+    # Verify that the study plan's plan_json was automatically replanned!
+    plan_after_checkin_resp = client.get(
+        f"/api/v1/plans/{plan_data['id']}",
+        headers=headers
+    )
+    plan_after_checkin = plan_after_checkin_resp.json()
+    schedule_after = plan_after_checkin["plan_json"]
+    
+    # Day 3 (index 2) should now contain "Control structures" (replanned)
+    assert len(schedule_after[2]["topics"]) == 1
+    assert schedule_after[2]["topics"][0]["title"] == "Control structures"
+    assert schedule_after[2]["is_review"] is False
+
+    # 7. Test manual replan endpoint
+    manual_replan_resp = client.post(
+        f"/api/v1/plans/{plan_data['id']}/replan",
+        headers=headers
+    )
+    assert manual_replan_resp.status_code == 200

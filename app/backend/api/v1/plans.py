@@ -1,4 +1,6 @@
-from typing import Any, List
+from typing import Any, List, Optional
+from datetime import date
+import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -7,8 +9,10 @@ from app.backend.api.v1.dependencies import get_current_user
 from app.backend.models.user import User
 from app.backend.models.plan import StudyPlan
 from app.backend.models.syllabus import Syllabus
+from app.backend.models.progress import DailyProgress
 from app.backend.schemas.plan import StudyPlanCreate, StudyPlanResponse
 from app.backend.planners.study_planner import StudyPlanner
+from app.backend.planners.replanner import Replanner
 
 router = APIRouter()
 
@@ -99,3 +103,54 @@ def read_plan(
             detail="Study plan not found"
         )
     return plan
+
+
+@router.post("/{plan_id}/replan", response_model=StudyPlanResponse)
+def trigger_manual_replan(
+    plan_id: int,
+    from_date: Optional[date] = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> Any:
+    """
+    Manually trigger a replan starting from a specified date.
+    Defaults to tomorrow if from_date is not provided.
+    """
+    plan = (
+        db.query(StudyPlan)
+        .join(Syllabus)
+        .filter(StudyPlan.id == plan_id, Syllabus.user_id == current_user.id)
+        .first()
+    )
+    if not plan:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Study plan not found for this user."
+        )
+
+    replan_start = from_date or (datetime.date.today() + datetime.timedelta(days=1))
+
+    # Gather all completed topics from all progress records
+    all_progress = db.query(DailyProgress).filter(DailyProgress.plan_id == plan_id).all()
+    completed_topic_ids = set()
+    for p in all_progress:
+        if p.completed_topics:
+            completed_topic_ids.update(p.completed_topics)
+
+    try:
+        new_schedule = Replanner.replan(
+            plan.syllabus.parsed_tree_json or [],
+            plan.plan_json,
+            completed_topic_ids,
+            replan_start,
+            plan.end_date
+        )
+        plan.plan_json = new_schedule
+        db.commit()
+        db.refresh(plan)
+        return plan
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
