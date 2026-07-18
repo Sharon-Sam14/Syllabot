@@ -4,36 +4,33 @@
 
 ## Current Status
 - Project concept defined: Syllabot, an adaptive study planner for syllabi
-- Core product idea established: parse syllabus input, generate daily plans, and adapt when the student falls behind
-- Initial documentation scaffold created for product, architecture, phases, design, rules, and memory tracking
-- The project is currently in early planning and scaffolding stages
+- Phase 1 backend scaffolding (FastAPI, SQLAlchemy models, JWT auth) is fully complete.
+- Phase 2 backend (custom stack-based shift-reduce parser, static study planner, API integrations) is fully complete.
+- 12/12 unit and integration tests are passing successfully.
 
 ## Active Context
 - The product is being built as a modern web application with:
   - React/Next.js frontend
-  - Python backend
-  - PostgreSQL database
-- The backend parsing engine must support deeply nested syllabus hierarchies
-- The system will eventually include AI-driven planning and replanning behaviors
-- The architecture should support future AI agents for parsing, planning, and review tasks
+  - Python backend (FastAPI, SQLite for local dev, Postgres compatible)
+- The backend parsing engine successfully extracts nested hierarchies deterministically.
+- The planning engine automatically spreads topics over a start-end date range, grouping or spacing with review days.
 
 ## Important Product Decisions
 - The planner should be adaptive rather than static
 - The experience should feel calm and supportive, not stressful
 - Syllabus topics must be preserved from user input and never invented
 - The initial implementation should prioritize correctness and reliability over overly aggressive automation
+- The application will strictly use open-source, free-tier compatible, and easy-to-deploy technologies (e.g. SQLite database, minimal runtime dependency footprint, zero-cost service structures)
 
 ## Open Questions
-- Which parsing strategy will be used for the first production version: deterministic parser, LLM-assisted parser, or hybrid?
-- How much user input should be required for topic importance weighting?
-- Which daily check-in signals should be collected first: hours studied, topics completed, or a simple yes/no progress marker?
+- What daily check-in signals will trigger the replanning threshold (e.g., how many days behind, or is it triggered on any deviation)?
+- What visual cues should be used in the UI to present the changes of an adapted schedule without causing student panic?
 
 ## Next Steps
-- Scaffold the frontend and backend project structure
-- Implement initial syllabus ingestion and validation endpoints
-- Build the first deterministic parsing pipeline for nested syllabus content
-- Create the first static plan generation flow
-- Add daily progress tracking and the initial replanning loop
+- Scaffold the Next.js frontend project structure
+- Build frontend login, signup, and profile session views
+- Implement syllabus upload and plan visualization dashboard
+- Build the Phase 3 daily progress tracking check-ins and the adaptive replanning loop backend service
 
 ## AI Agent Notes
 - Future agents should be task-specific and bounded in responsibility
@@ -43,4 +40,4 @@
 ---
 
 ## Last Updated
-- 2026-07-17
+- 2026-07-18

@@ -9,6 +9,7 @@ These rules define the boundaries for all future AI-assisted development on Syll
 - Keep functions small, composable, and readable.
 - Favor explicit logic over hidden magic.
 - Write code that is easy to test and easy to extend.
+- Ensure the tech stack and resources used are strictly free-tier compatible and simple to deploy (e.g., using SQLite by default, minimal runtime resource overhead, and avoiding mandatory costly third-party service dependencies).
 
 ## 3. Syllabus Integrity Rules
 - Do not hallucinate syllabus topics, chapters, modules, or learning outcomes.

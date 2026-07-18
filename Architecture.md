@@ -217,6 +217,7 @@ The parser should emit a structured object with at least:
 - AI usage should be optional and guarded by fallback logic
 - Error states should be visible in the UI without breaking the app
 - The system should be modular enough to evolve from static planning to more autonomous agents
+- The application architecture and dependencies must support free-tier hosting limits and simple resource deployment (e.g. SQLite database file storage capability, minimal memory usage, zero mandatory SaaS pricing plans)
 
 ---
 
