@@ -22,10 +22,8 @@ The project documentation is organized as follows:
 Syllabot aims to reduce the stress of exam preparation by making study planning adaptive, intelligent, and calm rather than rigid and discouraging.
 
 ## Status
-Current status: planning and documentation scaffolded.
+Current status: backend planning engine, parser, database models, and API endpoints are fully completed, tested, and ready.
 
 ## Next Steps
-- Scaffold the frontend and backend
-- Implement syllabus ingestion and parsing
-- Build the initial static planning engine
-- Add daily progress tracking and adaptive replanning
+- Scaffolding and integration of the frontend application (which will reside under the `/frontend` directory).
+- Build Phase 4 premium reinforcement quizzes and institutional dashboard reporting.

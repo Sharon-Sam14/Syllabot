@@ -85,28 +85,23 @@ The system is also designed with an AI-agent-oriented future in mind, where plan
 ## 5. Suggested Folder Structure
 ```text
 syllabot/
-  app/
-    frontend/
-      components/
-      pages/ or app/
-      lib/
-      styles/
-    backend/
-      api/
-        v1/
-      core/
-      services/
-      agents/
-      parsers/
-      planners/
-      models/
-      schemas/
-      tests/
-      utils/
-  infra/
-    docker/
-    postgres/
-    env/
+  backend/
+    api/
+      v1/
+    core/
+    services/
+    agents/
+    parsers/
+    planners/
+    models/
+    schemas/
+    tests/
+    utils/
+  frontend/
+    components/
+    pages/ or app/
+    lib/
+    styles/
   docs/
     PRD.md
     Architecture.md
