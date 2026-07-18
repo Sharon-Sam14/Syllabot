@@ -6,7 +6,8 @@
 - Project concept defined: Syllabot, an adaptive study planner for syllabi
 - Phase 1 backend scaffolding (FastAPI, SQLAlchemy models, JWT auth) is fully complete.
 - Phase 2 backend (custom stack-based shift-reduce parser, static study planner, API integrations) is fully complete.
-- 12/12 unit and integration tests are passing successfully.
+- Phase 3 backend (adaptive replanning loop engine, auto-replanning check-ins, manual replan API) is fully complete.
+- 14/14 unit and integration tests are passing successfully.
 
 ## Active Context
 - The product is being built as a modern web application with:
@@ -14,6 +15,7 @@
   - Python backend (FastAPI, SQLite for local dev, Postgres compatible)
 - The backend parsing engine successfully extracts nested hierarchies deterministically.
 - The planning engine automatically spreads topics over a start-end date range, grouping or spacing with review days.
+- The replanner dynamically updates the database schedule when a student falls behind, preserving completed workload history.
 
 ## Important Product Decisions
 - The planner should be adaptive rather than static
@@ -30,7 +32,7 @@
 - Scaffold the Next.js frontend project structure
 - Build frontend login, signup, and profile session views
 - Implement syllabus upload and plan visualization dashboard
-- Build the Phase 3 daily progress tracking check-ins and the adaptive replanning loop backend service
+- Connect frontend components to backend endpoints (Auth, Ingestion, Plans, Progress, Replanning)
 
 ## AI Agent Notes
 - Future agents should be task-specific and bounded in responsibility
