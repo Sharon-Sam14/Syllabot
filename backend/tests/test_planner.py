@@ -1,6 +1,6 @@
 import datetime
 import pytest
-from app.backend.planners.study_planner import StudyPlanner
+from backend.planners.study_planner import StudyPlanner
 
 
 def test_planner_invalid_dates():

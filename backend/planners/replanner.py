@@ -1,6 +1,6 @@
 import datetime
 from typing import List, Dict, Any, Set
-from app.backend.planners.study_planner import StudyPlanner
+from backend.planners.study_planner import StudyPlanner
 
 
 class Replanner:

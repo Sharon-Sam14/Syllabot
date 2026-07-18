@@ -2,13 +2,13 @@ from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.backend.core.database import get_db
-from app.backend.api.v1.dependencies import get_current_user
-from app.backend.models.user import User
-from app.backend.models.plan import StudyPlan
-from app.backend.models.syllabus import Syllabus
-from app.backend.models.progress import DailyProgress
-from app.backend.schemas.progress import DailyProgressCreate, DailyProgressResponse
+from backend.core.database import get_db
+from backend.api.v1.dependencies import get_current_user
+from backend.models.user import User
+from backend.models.plan import StudyPlan
+from backend.models.syllabus import Syllabus
+from backend.models.progress import DailyProgress
+from backend.schemas.progress import DailyProgressCreate, DailyProgressResponse
 
 router = APIRouter()
 
@@ -63,7 +63,7 @@ def create_progress_record(
 
     # Automatically check and trigger replanning if the student falls behind
     import datetime
-    from app.backend.planners.replanner import Replanner
+    from backend.planners.replanner import Replanner
 
     # Collect all completed topic IDs across all check-ins for this plan
     all_progress = db.query(DailyProgress).filter(DailyProgress.plan_id == plan_id).all()

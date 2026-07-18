@@ -1,4 +1,4 @@
-from app.backend.parsers.syllabus_parser import SyllabusParser
+from backend.parsers.syllabus_parser import SyllabusParser
 
 
 def test_parser_basic_structure():

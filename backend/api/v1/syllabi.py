@@ -2,13 +2,13 @@ from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.backend.core.database import get_db
-from app.backend.api.v1.dependencies import get_current_user
-from app.backend.models.user import User
-from app.backend.models.syllabus import Syllabus
-from app.backend.schemas.syllabus import SyllabusCreate, SyllabusResponse
+from backend.core.database import get_db
+from backend.api.v1.dependencies import get_current_user
+from backend.models.user import User
+from backend.models.syllabus import Syllabus
+from backend.schemas.syllabus import SyllabusCreate, SyllabusResponse
 
-from app.backend.parsers.syllabus_parser import SyllabusParser
+from backend.parsers.syllabus_parser import SyllabusParser
 
 router = APIRouter()
 

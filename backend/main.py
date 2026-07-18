@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.backend.core.config import settings
-from app.backend.api.v1 import auth, syllabi, plans, progress
+from backend.core.config import settings
+from backend.api.v1 import auth, syllabi, plans, progress
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

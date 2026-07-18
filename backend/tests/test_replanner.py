@@ -1,6 +1,6 @@
 import datetime
 import pytest
-from app.backend.planners.replanner import Replanner
+from backend.planners.replanner import Replanner
 
 
 def test_is_student_behind():

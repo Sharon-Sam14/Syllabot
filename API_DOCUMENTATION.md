@@ -9,15 +9,15 @@ This document describes how to integrate the frontend application with the Pytho
 1. **Activate the Virtual Environment**:
    - On Windows:
      ```powershell
-     .\app\backend\venv\Scripts\activate
+     .\backend\venv\Scripts\activate
      ```
    - On Unix/macOS:
      ```bash
-     source app/backend/venv/bin/activate
+     source backend/venv/bin/activate
      ```
 2. **Install Dependencies**:
    ```bash
-   pip install -r app/backend/requirements.txt
+   pip install -r backend/requirements.txt
    ```
 3. **Set Up Environment Variables**:
    A local `.env` file should be placed at the root of the project. Default settings:
@@ -34,7 +34,7 @@ This document describes how to integrate the frontend application with the Pytho
    ```
 5. **Start Uvicorn Development Server**:
    ```bash
-   uvicorn app.backend.main:app --reload --port 8000
+   uvicorn backend.main:app --reload --port 8000
    ```
 
 FastAPI automatically generates an interactive **Swagger UI** containing all models and schemas at:

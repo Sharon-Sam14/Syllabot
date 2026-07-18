@@ -1,7 +1,7 @@
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, JSON
 from sqlalchemy.orm import relationship
-from app.backend.core.database import Base
+from backend.core.database import Base
 
 
 class StudyPlan(Base):

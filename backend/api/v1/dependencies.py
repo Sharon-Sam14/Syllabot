@@ -4,11 +4,11 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
-from app.backend.core.config import settings
-from app.backend.core.database import get_db
-from app.backend.core.security import verify_password
-from app.backend.models.user import User
-from app.backend.schemas.user import TokenData
+from backend.core.config import settings
+from backend.core.database import get_db
+from backend.core.security import verify_password
+from backend.models.user import User
+from backend.schemas.user import TokenData
 
 # Token URL points to the relative login endpoint path
 oauth2_scheme = OAuth2PasswordBearer(

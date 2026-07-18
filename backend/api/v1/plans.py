@@ -4,15 +4,15 @@ import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.backend.core.database import get_db
-from app.backend.api.v1.dependencies import get_current_user
-from app.backend.models.user import User
-from app.backend.models.plan import StudyPlan
-from app.backend.models.syllabus import Syllabus
-from app.backend.models.progress import DailyProgress
-from app.backend.schemas.plan import StudyPlanCreate, StudyPlanResponse
-from app.backend.planners.study_planner import StudyPlanner
-from app.backend.planners.replanner import Replanner
+from backend.core.database import get_db
+from backend.api.v1.dependencies import get_current_user
+from backend.models.user import User
+from backend.models.plan import StudyPlan
+from backend.models.syllabus import Syllabus
+from backend.models.progress import DailyProgress
+from backend.schemas.plan import StudyPlanCreate, StudyPlanResponse
+from backend.planners.study_planner import StudyPlanner
+from backend.planners.replanner import Replanner
 
 router = APIRouter()
 

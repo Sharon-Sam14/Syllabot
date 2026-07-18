@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-from app.backend.core.config import settings
+from backend.core.config import settings
 
 # Adjust create_engine connect_args for SQLite database compatibility
 connect_args = {}
