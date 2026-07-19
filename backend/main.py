@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.core.config import settings
 from backend.api.v1 import auth, syllabi, plans, progress
+from backend.ai import router as ai_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -40,6 +41,11 @@ app.include_router(
     progress.router,
     prefix=f"{settings.API_V1_STR}/progress",
     tags=["Daily Progress & Tracking"]
+)
+app.include_router(
+    ai_router.router,
+    prefix=f"{settings.API_V1_STR}/ai",
+    tags=["AI Study Assistant"]
 )
 
 
