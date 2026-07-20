@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-blue: #1F4E79;
+  --color-calm-blue: #4E7DA0;
+  
+  --color-card-bg: var(--card-bg);
+  --color-app-bg: var(--app-bg);
+  --color-app-text: var(--app-text);
+  --color-app-border: var(--app-border);
+  
+  --color-neon-green: #00FF66;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-yellow: #E1FF00;
+  --color-neon-orange: #FF5C00;
+  --color-neon-red: #FF0055;
+  
+  --font-sans: var(--font-comfortaa), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
+}
+
+:root {
+  --app-bg: #E6E4DD; /* Warm beige Cardiology canvas */
+  --card-bg: #FAF9F5; /* Soft pale card background */
+  --app-text: #232E3A; /* Slate charcoal text */
+  --app-border: #D1CFCD; /* Soft dark outline borders */
+  color-scheme: light;
+}
+
+.dark {
+  --app-bg: #0C0C0D; /* High-contrast dark widgets base */
+  --card-bg: #141416; /* Clean black card widget */
+  --app-text: #FFFFFF; /* High-contrast text */
+  --app-border: #232326; /* Dark gray outline borders */
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Squircle Utilities inspired by widgets */
+.squircle-card {
+  border-radius: 32px;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--app-border);
+  position: relative;
+  transition: background-color 0.3s ease, border-color 0.3s ease, shadow 0.3s ease;
+}
+
+/* Squirclish Tab corner cutouts */
+.squircle-tab-top {
+  position: absolute;
+  top: -1.5px;
+  right: 28px;
+  height: 28px;
+  width: 80px;
+  background-color: var(--app-bg);
+  border-bottom: 1.5px solid var(--app-border);
+  border-left: 1.5px solid var(--app-border);
+  border-right: 1.5px solid var(--app-border);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--app-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4E7DA0;
+}
+
+/* Micro-animations */
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Glow effects for dark theme */
+.dark .neon-glow-green {
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+}
+
+.dark .neon-glow-cyan {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+}
+
+.dark .neon-glow-yellow {
+  box-shadow: 0 0 15px rgba(225, 255, 0, 0.15);
+}
+
+.dark .neon-glow-orange {
+  box-shadow: 0 0 15px rgba(255, 92, 0, 0.15);
+}
+
+/* Custom line charts for the Cardiology roadmap layout */
+.tree-line-connector-v {
+  position: absolute;
+  left: 24px;
+  top: 40px;
+  bottom: -40px;
+  width: 2px;
+  background-color: var(--app-border);
+  z-index: 0;
+}
+
+.tree-line-connector-h {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  width: 24px;
+  height: 2px;
+  background-color: var(--app-border);
+  z-index: 0;
+}
+
+/* Equalizer animations for study timer */
+@keyframes equalize {
+  0% { height: 4px; }
+  50% { height: 20px; }
+  100% { height: 4px; }
+}
+
+.equalizer-bar-animated {
+  animation: equalize 0.8s ease-in-out infinite alternate;
+}
+
