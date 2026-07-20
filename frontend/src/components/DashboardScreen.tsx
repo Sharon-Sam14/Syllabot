@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   StudyPlanResponse,
   DailyProgressResponse,
@@ -6,6 +6,8 @@ import {
   progressApi,
   StudyPlanDay,
   StudyPlanTopic,
+  aiApi,
+  AIChatMessage,
 } from "../lib/api";
 import FlipClock from "./FlipClock";
 import {
@@ -72,6 +74,14 @@ export default function DashboardScreen({
   // Interactive Stopwatch Timer state
   const [timerActive, setTimerActive] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(0);
+
+  // AI Neural Assist state
+  const [aiMessages, setAiMessages] = useState<AIChatMessage[]>([]);
+  const [aiInput, setAiInput] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiConversationId] = useState(() => Math.random().toString(36).slice(2) + Date.now().toString(36));
+  const aiChatEndRef = useRef<HTMLDivElement>(null);
 
   // Tuner recall target state
   const [recallTarget, setRecallTarget] = useState(92.4);
@@ -280,10 +290,12 @@ export default function DashboardScreen({
             {[
               { id: "Roadmap", label: "Treatment Dynamics" },
               { id: "Check-ins", label: "Visits & Logs" },
-              { id: "Settings", label: "Genetics & Replan" }
+              { id: "Settings", label: "Genetics & Replan" },
+              { id: "AI Assistant", label: "Neural Assist" }
             ].map((tab) => (
               <button
                 key={tab.id}
+                id={`dashboard-tab-${tab.id.toLowerCase().replace(/\s+/g, '-')}`}
                 onClick={() => setActiveCategory(tab.id)}
                 className={`px-4 py-2 text-xs font-bold rounded-full border transition-all duration-200 cursor-pointer ${
                   activeCategory === tab.id
@@ -291,7 +303,12 @@ export default function DashboardScreen({
                     : "bg-app-bg/40 text-app-text/70 border-transparent hover:border-app-border"
                 }`}
               >
-                {tab.label}
+                {tab.id === "AI Assistant" ? (
+                  <span className="flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    {tab.label}
+                  </span>
+                ) : tab.label}
               </button>
             ))}
           </div>
@@ -956,6 +973,159 @@ export default function DashboardScreen({
               {replanLoading ? "Calibrating..." : "Calibrate Adaptive Replan"}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* 6. Neural Assist — AI Chat Panel */}
+      {activeCategory === "AI Assistant" && (
+        <div className="squircle-card p-6 max-w-3xl mx-auto text-left flex flex-col" style={{ minHeight: "520px" }}>
+          {/* Header */}
+          <h2 className="text-xl font-bold text-app-text mb-1 flex items-center space-x-2">
+            <Sparkles className="h-5 w-5 text-calm-blue" />
+            <span>Neural Assist</span>
+          </h2>
+          <p className="text-xs text-calm-blue mb-5 leading-relaxed">
+            Ask anything about your syllabus, request a quiz, get topic summaries, or analyze your progress.
+          </p>
+
+          {/* Chat messages */}
+          <div
+            className="flex-1 overflow-y-auto space-y-4 mb-5 pr-1"
+            style={{ maxHeight: "340px" }}
+          >
+            {aiMessages.length === 0 && (
+              <div className="text-center py-10">
+                <Sparkles className="h-8 w-8 text-calm-blue/30 mx-auto mb-3" />
+                <p className="text-xs text-calm-blue/60 font-semibold uppercase tracking-wider">
+                  Start a conversation
+                </p>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {[
+                    "Quiz me on today's topics",
+                    "Summarize my next topic",
+                    "How am I doing?",
+                    "Replan from today"
+                  ].map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      onClick={() => setAiInput(suggestion)}
+                      className="text-[10px] font-bold px-3 py-1.5 rounded-full border border-app-border bg-app-bg hover:bg-card-bg transition-colors cursor-pointer text-app-text/70 hover:text-app-text"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {aiMessages.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`flex ${
+                  msg.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-xs leading-relaxed font-medium ${
+                    msg.role === "user"
+                      ? "bg-app-text text-card-bg rounded-tr-sm"
+                      : "bg-app-bg border border-app-border text-app-text rounded-tl-sm"
+                  }`}
+                  style={{ whiteSpace: "pre-wrap" }}
+                >
+                  {msg.role === "assistant" && (
+                    <div className="flex items-center gap-1 mb-2 text-calm-blue">
+                      <Sparkles className="h-2.5 w-2.5" />
+                      <span className="text-[9px] font-bold uppercase tracking-wider">Syllabot</span>
+                    </div>
+                  )}
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+
+            {aiLoading && (
+              <div className="flex justify-start">
+                <div className="bg-app-bg border border-app-border rounded-2xl rounded-tl-sm px-4 py-3 text-xs">
+                  <div className="flex items-center gap-2 text-calm-blue">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Thinking...</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {aiError && (
+              <div className="flex justify-start">
+                <div className="bg-app-bg border border-app-border rounded-2xl rounded-tl-sm px-4 py-3 text-xs text-app-text/70">
+                  <div className="flex items-center gap-1.5 mb-1 text-calm-blue">
+                    <AlertCircle className="h-3 w-3" />
+                    <span className="text-[9px] font-bold uppercase">Notice</span>
+                  </div>
+                  {aiError}
+                </div>
+              </div>
+            )}
+
+            <div ref={aiChatEndRef} />
+          </div>
+
+          {/* Input form */}
+          <form
+            id="ai-chat-form"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const msg = aiInput.trim();
+              if (!msg || aiLoading) return;
+
+              const userMsg: AIChatMessage = { role: "user", content: msg };
+              setAiMessages((prev) => [...prev, userMsg]);
+              setAiInput("");
+              setAiLoading(true);
+              setAiError(null);
+
+              try {
+                const res = await aiApi.chat(msg, aiConversationId);
+                setAiMessages((prev) => [
+                  ...prev,
+                  { role: "assistant", content: res.response },
+                ]);
+                // Scroll to bottom
+                setTimeout(() => aiChatEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+              } catch (err: any) {
+                const errMsg =
+                  err?.message?.includes("503") || err?.message?.includes("Service Unavailable")
+                    ? "🔑 AI features aren't configured yet. Add GEMINI_API_KEY or GROQ_API_KEY to your .env file to activate Neural Assist."
+                    : err?.message || "Something went wrong. Please try again.";
+                setAiError(errMsg);
+              } finally {
+                setAiLoading(false);
+              }
+            }}
+            className="flex items-center gap-3 border-t border-app-border pt-4"
+          >
+            <input
+              id="ai-chat-input"
+              type="text"
+              value={aiInput}
+              onChange={(e) => setAiInput(e.target.value)}
+              disabled={aiLoading}
+              placeholder="Ask anything... quiz me, summarize a topic, how am I doing?"
+              className="flex-1 bg-app-bg border border-app-border rounded-xl py-2.5 px-4 text-xs text-app-text focus:outline-none placeholder:text-app-text/40 disabled:opacity-50"
+            />
+            <button
+              id="ai-chat-submit"
+              type="submit"
+              disabled={aiLoading || !aiInput.trim()}
+              className="h-9 w-9 rounded-xl bg-app-text flex items-center justify-center text-card-bg hover:opacity-85 transition-all disabled:opacity-30 cursor-pointer shrink-0"
+            >
+              {aiLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </button>
+          </form>
         </div>
       )}
 

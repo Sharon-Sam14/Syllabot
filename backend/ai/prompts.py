@@ -31,7 +31,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "syllabus_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the syllabus to fetch topics for."
                 }
             },
@@ -45,7 +45,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "syllabus_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the syllabus."
                 }
             },
@@ -59,7 +59,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "syllabus_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the syllabus."
                 },
                 "query": {
@@ -77,7 +77,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "syllabus_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the syllabus."
                 },
                 "start_date": {
@@ -99,7 +99,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "plan_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the study plan to reschedule."
                 },
                 "from_date": {
@@ -117,7 +117,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "plan_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the study plan."
                 }
             },
@@ -131,7 +131,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "plan_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the study plan."
                 }
             },
@@ -145,7 +145,7 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "plan_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the study plan."
                 },
                 "date": {
@@ -178,8 +178,63 @@ TOOLS_DECLARATIONS = [
             "type": "object",
             "properties": {
                 "plan_id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "The unique ID of the study plan."
+                }
+            },
+            "required": ["plan_id"]
+        }
+    },
+    {
+        "name": "generate_quiz",
+        "description": "Prepare quiz context for a study plan. Returns topic metadata used to generate MCQ practice questions. Use when the student asks for a quiz, practice questions, or wants to test themselves.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "plan_id": {
+                    "type": "string",
+                    "description": "The unique ID of the study plan to draw quiz topics from."
+                },
+                "topic_ids": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional list of specific topic IDs to quiz on. If omitted, uses top priority incomplete topics."
+                },
+                "num_questions": {
+                    "type": "string",
+                    "description": "Number of quiz questions to prepare (default: 5)."
+                }
+            },
+            "required": ["plan_id"]
+        }
+    },
+    {
+        "name": "summarize_topic",
+        "description": "Retrieve metadata for a specific topic so the AI can generate a student-friendly summary. Use when the student asks to explain, summarize, or get an overview of a specific topic.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "syllabus_id": {
+                    "type": "string",
+                    "description": "The unique ID of the syllabus containing the topic."
+                },
+                "topic_id": {
+                    "type": "string",
+                    "description": "The unique ID of the specific topic to summarize."
+                }
+            },
+            "required": ["syllabus_id", "topic_id"]
+        }
+    },
+    {
+        "name": "analyze_study_patterns",
+        "description": "Analyze a student's study patterns, pace, weak topics, and progress trends. Use when the student asks about their performance, weak areas, how they are doing, or wants study recommendations.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "plan_id": {
+                    "type": "string",
+                    "description": "The unique ID of the study plan to analyze."
                 }
             },
             "required": ["plan_id"]

@@ -109,6 +109,7 @@ syllabot/
     Design.md
     Rules.md
     Memory.md
+    AI_INFRASTRUCTURE.md
 ```
 
 ## 6. Recommended Tech Stack

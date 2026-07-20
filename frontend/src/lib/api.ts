@@ -204,3 +204,55 @@ export const progressApi = {
     return apiRequest<DailyProgressResponse[]>(`/api/v1/progress/${planId}`);
   },
 };
+
+// ─────────────────────────────────────────────────────────────────
+// AI Chat API
+// ─────────────────────────────────────────────────────────────────
+
+export interface AIChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface AIChatResponse {
+  response: string;
+  actions: Array<{
+    tool: string;
+    arguments: Record<string, unknown>;
+    output: unknown;
+  }>;
+  sources: string[];
+}
+
+export interface AIProviderStatus {
+  gemini: { available: boolean; default_model: string };
+  groq: { available: boolean; default_model: string };
+  any_available: boolean;
+}
+
+export const aiApi = {
+  /**
+   * Send a message to the Syllabot AI agent.
+   * The agent routes the request through LangGraph to the appropriate node.
+   *
+   * @param message        - The user's natural language message.
+   * @param conversationId - Session identifier for conversation memory.
+   * @returns AIChatResponse with response text, tool actions, and sources.
+   */
+  async chat(message: string, conversationId: string): Promise<AIChatResponse> {
+    return apiRequest<AIChatResponse>("/api/v1/ai/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        message,
+        conversation_id: conversationId,
+      }),
+    });
+  },
+
+  /**
+   * Check which AI providers are currently configured and available.
+   */
+  async getStatus(): Promise<AIProviderStatus> {
+    return apiRequest<AIProviderStatus>("/api/v1/ai/status");
+  },
+};

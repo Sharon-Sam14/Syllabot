@@ -225,3 +225,59 @@ When a student checks in, if they did not complete the topics scheduled for toda
 * **Endpoint**: `GET /api/v1/progress/{plan_id}`
 * **Headers**: `Authorization: Bearer <token>`
 * **Response (JSON)**: Returns a list of daily check-ins.
+
+---
+
+## 🤖 AI Study Assistant (LangGraph Agent Gateway)
+
+Syllabot features a LangGraph-orchestrated study assistant that handles requests by routing them dynamically to specialized task nodes (parse, plan, progress check-ins, replanning tips, topic summarization, practice quizzes).
+
+### 1. Send Message to AI Assistant
+* **Endpoint**: `POST /api/v1/ai/chat`
+* **Headers**: `Authorization: Bearer <token>`
+* **Request Body (JSON)**:
+  ```json
+  {
+    "message": "Quiz me on basic variables",
+    "conversation_id": "session_123"
+  }
+  ```
+* **Response (JSON)**:
+  ```json
+  {
+    "response": "Here are your quiz questions:\n\nQ1: What keyword is used to declare a variable in Python?\nA. var\nB. let\nC. Python does not require a keyword\nD. define\nAnswer: C — Python is dynamically typed.",
+    "actions": [
+      {
+        "tool": "generate_quiz",
+        "arguments": {
+          "plan_id": 1,
+          "num_questions": 5
+        },
+        "output": {
+          "status": "success",
+          "topics": ["node_2"]
+        }
+      }
+    ],
+    "sources": ["Syllabus #1", "Study Plan #1"]
+  }
+  ```
+
+### 2. Get AI Model Provider Status
+* **Endpoint**: `GET /api/v1/ai/status`
+* **Headers**: `Authorization: Bearer <token>`
+* **Response (JSON)**:
+  ```json
+  {
+    "gemini": {
+      "available": true,
+      "default_model": "gemini-1.5-flash"
+    },
+    "groq": {
+      "available": true,
+      "default_model": "llama-3.3-70b-versatile"
+    },
+    "any_available": true
+  }
+  ```
+

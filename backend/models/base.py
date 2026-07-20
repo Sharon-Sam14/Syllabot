@@ -4,3 +4,5 @@ from backend.models.user import User
 from backend.models.syllabus import Syllabus
 from backend.models.plan import StudyPlan
 from backend.models.progress import DailyProgress
+from backend.models.user_memory import UserMemory
+

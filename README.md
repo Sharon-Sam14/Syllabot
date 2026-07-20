@@ -17,6 +17,8 @@ The project documentation is organized as follows:
 - [Design.md](Design.md) – visual and UX guidance
 - [Rules.md](Rules.md) – AI and engineering guardrails
 - [Memory.md](Memory.md) – project context and state tracker
+- [docs/AI_INFRASTRUCTURE.md](docs/AI_INFRASTRUCTURE.md) – refactored AI module, fallback, and serialization architecture
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) – production deployment guide for Supabase, Render, and Vercel
 
 ## Vision
 Syllabot aims to reduce the stress of exam preparation by making study planning adaptive, intelligent, and calm rather than rigid and discouraging.
