@@ -9,6 +9,14 @@ Configured with:
   - CORS locked to FRONTEND_URL in production (open in dev if not set)
   - All API routers registered under /api/v1
 """
+import sys
+from pathlib import Path
+
+# Add parent directory to sys.path to allow importing backend.* when running from backend directory
+parent_dir = str(Path(__file__).resolve().parent.parent)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+
 import logging
 
 from fastapi import FastAPI, Request
