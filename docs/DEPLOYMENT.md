@@ -15,12 +15,13 @@ This guide explains how to deploy the Syllabot platform in production using free
 4. Wait for the project provisioning to complete (usually 1-2 minutes).
 5. In your Supabase dashboard:
    - Navigate to **Project Settings** (gear icon) -> **Database**.
-   - Scroll down to the **Connection string** section.
-   - Copy the **URI connection string**. It looks like this:
+   - Scroll down to the **Connection Pooler** section (do NOT use the direct connection string, as it resolves to an IPv6 address which is not supported by Render's build network, causing a `Network is unreachable` error).
+   - Ensure the pooler **Mode** is set to **Session** (which uses port `5432`).
+   - Copy the **URI connection string** from the Connection Pooler section. It looks like this:
      ```text
-     postgresql://postgres.[username]:[password]@[host]:5432/postgres
+     postgresql://postgres.[project-ref]:[password]@[pooler-host]:5432/postgres
      ```
-   - Swap the placeholders `[password]` with your real Database Password.
+   - Swap the placeholder `[password]` with your real Database Password.
 
 ---
 
