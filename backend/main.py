@@ -55,26 +55,25 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-# In production, FRONTEND_URL must be set in .env to restrict origins.
-# In development (FRONTEND_URL not set), all origins are allowed.
+# Allow FRONTEND_URL if configured, plus all Vercel deployment domains (*.vercel.app) & local dev
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
+]
+
 if settings.FRONTEND_URL:
     base_origin = settings.FRONTEND_URL.rstrip("/")
-    allowed_origins = [base_origin]
-    
-    # Automatically support both localhost and 127.0.0.1 local development variants
-    if "localhost" in base_origin:
-        allowed_origins.append(base_origin.replace("localhost", "127.0.0.1"))
-    elif "127.0.0.1" in base_origin:
-        allowed_origins.append(base_origin.replace("127.0.0.1", "localhost"))
-        
-    logger.info("CORS locked to origins", extra={"origins": allowed_origins})
-else:
-    allowed_origins = ["*"]
-    logger.warning("CORS is open to all origins — set FRONTEND_URL in .env for production")
+    if base_origin not in allowed_origins:
+        allowed_origins.append(base_origin)
+
+logger.info("CORS allowed origins", extra={"origins": allowed_origins})
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
